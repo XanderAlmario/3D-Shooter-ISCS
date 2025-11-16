@@ -27,6 +27,10 @@ public class PlayerMovement : MonoBehaviour
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
+
+        animator.SetFloat( "Vertical", Mathf.Abs( vertical ) );
+        animator.SetFloat( "Horizontal", Mathf.Abs( horizontal ) );
+
         camX += Input.GetAxis("Mouse X");
         camY += Input.GetAxis("Mouse Y");
         camOffsetY = origCamY - (camY / 20);
@@ -74,3 +78,4 @@ public class PlayerMovement : MonoBehaviour
         grounded = false;
     }
 }
+
