@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
     public CapsuleCollider playerCollider;
+    public Animator animator;
 
     public float speed = 15.5f,
     smoothTurningTime = 0.1f, smoothTurningVel,
@@ -78,4 +79,5 @@ public class PlayerMovement : MonoBehaviour
         grounded = false;
     }
 }
+
 
