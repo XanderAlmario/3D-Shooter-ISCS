@@ -1,0 +1,22 @@
+0.5: Set the Active Input Handling to "Both" in project settings. Make an environment to move around (make a plane for the ground, cube and cylinder for obstacles, etc.; all found when you right click the hierarchy and hover over 3D Object)
+
+STEPS FOR PLAYER
+1. Create an empty object called "Player" and add a Character Controller component to it. Add the PlayerMovementCM and Aiming scripts to this object as well.
+2. Install Cinemachine (Window > Package Management > Package Manager and search for Cinemachine to install) and right click on the hierarchy then go to
+Cinemachine > Cinemachine camera to create a Cinemachine(CM) cam
+3. Under the Player object, create an empty object called "CameraTarget," then in the inspector of the CM cam, drag that CameraTarget to the "Tracking
+Target" field
+4. Adjust the CameraTarget to have an OTS shot of the player (see image for reference)
+5. In CM cam inspector, set "Position Control" to "Third Person Follow," then under "CM Third Person Follow"(new component), set all the dampings to 0
+6. Go back to Player and set all the serialized fields of PlayerMovementCM
+- Controller: Drag Character Controller of Player object to it
+- Ground: Select the ground layer(note that the plane for the ground needs to be in the same layer)
+7. Set serialized fields of Aiming
+- Value Range of X Axis: -180 to 180
+- Check "Wrap" for X Axis
+- Speed(both X and Y Axis): 300 as Max Speed
+- X Axis Input Axis Name: Mouse X
+- Value Range for Y Axis: -60 to 60
+- Y Axis Input Axis Name: Mouse Y
+- Check "Invert" for Y Axis
+- Cam Follow Pos: CameraTarget
