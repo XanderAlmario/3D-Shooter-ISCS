@@ -1,8 +1,0 @@
-0.5: Set the Active Input Handling to "Both" in project settings. Make an environment to move around (make a plane for the ground, cube and cylinder for obstacles, etc.; all found when you right click the hierarchy and hover over 3D Object)
-
-STEPS FOR PLAYER
-1. Create an empty object called "Player" and add a Character Controller component to it. Make the camera a child of said object
-2. Make an object to signify the player and make it a child of the Player object as well (I used capsule)
-3. Make a cube object to act as an "arrow" to point where the player is facing. Make this a child of the capsule and place it as a nose facing forward(direction of the blue arrow) 
-4. Adjust the camera to have an OTS shot of the player (see image for reference)
-5. Add the PlayerMovement to the Player object and fill in the respective serialize fields
