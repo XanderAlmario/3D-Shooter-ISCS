@@ -1,0 +1,123 @@
+using UnityEngine;
+using UnityEngine.AI;
+
+public class EnemyAI : MonoBehaviour
+{
+    // agent will be the enemy object/unit
+    public NavMeshAgent agent;
+    public Transform player;
+    public LayerMask groundLayer, playerLayer;
+    public GameObject projectile;    
+
+    // creating variables for Patrol state
+    public Vector3 walkPoint;
+    bool walkPointSet;
+    public float walkPointRange;
+
+    // creating variables for Attack State
+    public float timeBetweenAttacks;
+    bool alreadyAttacked;
+
+    // enemy variables for checkers
+    public float sightRange, attackRange, health;
+    public bool playerInSight, playerInAttack;
+    
+    private void Awake()
+    {
+        player = GameObject.Find("Player").transform;
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // this is like a state machine to determine enemy behaviour
+        playerInSight = Physics.CheckSphere( transform.position, sightRange, playerLayer );
+        playerInAttack = Physics.CheckSphere( transform.position, attackRange, playerLayer );
+        if ( !playerInSight && !playerInAttack ) Patrolling();
+        if ( playerInSight && !playerInAttack ) ChasePlayer();
+        if ( playerInSight && playerInAttack ) AttackPlayer();
+    }
+
+    private void Patrolling()
+    {
+        // patroling is the default state and will keep doing this until player is seen
+
+        // this keeps on searching for a walk point until it finds a valid one
+        // a valid walkpoint is just if it's a point on the map/ground layer
+        if ( !walkPointSet ) SearchWalkPoint();
+
+        if ( walkPointSet )
+            agent.SetDestination( walkPoint );
+        
+        // simple distance formula
+        // because the difference between two points results in a vector, 
+        // we store this value in a Vector3
+        Vector3 distanceToWalkPoint = transform.position - walkPoint;
+    
+
+        // distance should be a noticeable length or else enemy wouldnt be moving/patrolling
+        if ( distanceToWalkPoint.magnitude < 1f )
+            walkPointSet = false;
+    }
+
+    private void SearchWalkPoint()
+    {
+        float randomZ = Random.Range( -walkPointRange, walkPointRange );
+        float randomX = Random.Range( -walkPointRange, walkPointRange );
+
+        walkPoint = new Vector3( transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
+
+        // this checks if the walkPoint is still on ground
+        // this is to ensure the random setting of point won't lead the enemy off map
+        if ( Physics.Raycast( walkPoint, -transform.up, 2f, groundLayer ) )
+            walkPointSet = true;
+    }
+
+    private void ChasePlayer()
+    {
+        agent.SetDestination( player.position );
+    }
+
+    private void AttackPlayer()
+    {
+        agent.SetDestination( transform.position );
+
+        transform.LookAt( player );
+
+        if( !alreadyAttacked )
+        {
+            // instantiates the projectile/bullet
+            Rigidbody rb = Instantiate( projectile, transform.position, Quaternion.identity ).GetComponent<Rigidbody>();
+            
+            // since we already make the agent look at the player
+            // we just need to make it shoot in the forward direction
+            // no "aiming" needed for the enemy
+            rb.AddForce( transform.forward * 32f, ForceMode.Impulse);
+            rb.AddForce( transform.up * 8f, ForceMode.Impulse);
+            alreadyAttacked = true;
+
+            // Invoke calls the function after the amount of time in parameter
+            // in this case, its after the value of timeBetweenAttacks
+            Invoke( nameof( ResetAttack ), timeBetweenAttacks );
+        }
+    }
+
+    private void ResetAttack()
+    {
+        alreadyAttacked = false;
+    }
+
+    public void TakeDamage( int damage )
+    {
+        health -= damage;
+
+        if ( health <= 0 ) Invoke( nameof ( DestroyEnemy ), 0.5f );
+
+    }
+
+    private void DestroyEnemy()
+    {
+        Destroy( gameObject );
+    }
+}
