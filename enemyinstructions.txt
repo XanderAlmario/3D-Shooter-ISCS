@@ -2,7 +2,7 @@
 2. in spider, add component Nav Mesh Agent
 2.5. see enemy.png for my settings for this component
 3. create one layer for ground, one layer for player (you can name it however, just make sure yk what u named it)
-4. create a capsule or sphere object, make it a prefab called enemy projectile or something
+4. create a capsule or sphere object, make it a prefab called enemy projectile or something, and make sure it has a rigidbody
 5. create an empty game object called NavMesh
 6. in your plane/ground object make sure its set to the ground layer, player is set to player layer
 6.5. note, for player, i made it the object mismo in the layer, not the empty game object player parent coz we will be referencing the position of the player obj 
