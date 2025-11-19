@@ -1,0 +1,13 @@
+1. drag spider object into scene 
+2. in spider, add component Nav Mesh Agent
+2.5. see enemy.png for my settings for this component
+3. create one layer for ground, one layer for player (you can name it however, just make sure yk what u named it)
+4. create a capsule or sphere object, make it a prefab called enemy projectile or something
+5. create an empty game object called NavMesh
+6. in your plane/ground object make sure its set to the ground layer, player is set to player layer
+6.5. note, for player, i made it the object mismo in the layer, not the empty game object player parent coz we will be referencing the position of the player obj 
+7. add component called NavMesh Surface, in object collection dropdown, in include layers, first select Nothing
+7.5 after youve selected nothing, now select ground layer and player layer, these should be the two layers in include layers
+8. still in NavMesh Surface, click bake, and this should make your whole plane light blue (see plane.png for ref)
+9. if you check the Awake() func in EnemyAI, theres a GameObject.Find() line there, make sure the string is the name of the player object you have
+10. add the EnemyAI script to your spider enemy, make sure you set the empty fields (ground layer, player layer, projectile, agent(spider), player obj etc), see enemy.png
